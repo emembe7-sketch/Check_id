@@ -1,0 +1,213 @@
+-- Delta Roblox Script - Hamster Menu (Thêm nút Anti Bullet)
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- 1. Tạo ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "HamsterGlowMenuGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = PlayerGui
+
+-- 2. Tạo Frame Menu chính
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0.4, 0, 0.5, 0)
+mainFrame.Position = UDim2.new(0.3, 0, 0.25, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+
+local uiSizeConstraint = Instance.new("UISizeConstraint")
+uiSizeConstraint.MinSize = Vector2.new(300, 220)
+uiSizeConstraint.MaxSize = Vector2.new(500, 380)
+uiSizeConstraint.Parent = mainFrame
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 12)
+uiCorner.Parent = mainFrame
+
+-- 3. Viền Menu cam mỏng (Thickness = 1)
+local uiStroke = Instance.new("UIStroke")
+uiStroke.Thickness = 1
+uiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+uiStroke.Parent = mainFrame
+
+local darkOrange = Color3.fromRGB(180, 60, 0)
+local lightOrange = Color3.fromRGB(255, 165, 0)
+uiStroke.Color = darkOrange
+
+local tweenInfoMenu = TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+local menuColorTween = TweenService:Create(uiStroke, tweenInfoMenu, {Color = lightOrange})
+menuColorTween:Play()
+
+-- 4. Tiêu đề "Hamster"
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0.15, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Hamster"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextScaled = true
+titleLabel.Parent = mainFrame
+
+-- Line phân cách
+local line = Instance.new("Frame")
+line.Size = UDim2.new(0.9, 0, 0, 1)
+line.Position = UDim2.new(0.05, 0, 0.15, 0)
+line.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+line.BorderSizePixel = 0
+line.Parent = mainFrame
+
+-- 5. Khung cuộn nội dung (ScrollingFrame)
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Name = "ContentScroll"
+scrollFrame.Position = UDim2.new(0.05, 0, 0.18, 0)
+scrollFrame.Size = UDim2.new(0.9, 0, 0.77, 0)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.BorderSizePixel = 0
+scrollFrame.ScrollBarThickness = 4
+scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(255, 165, 0)
+scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+scrollFrame.Parent = mainFrame
+
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+uiListLayout.Padding = UDim.new(0, 8)
+uiListLayout.Parent = scrollFrame
+
+local uiPadding = Instance.new("UIPadding")
+uiPadding.PaddingTop = UDim.new(0, 4)
+uiPadding.PaddingBottom = UDim.new(0, 4)
+uiPadding.PaddingLeft = UDim.new(0, 4)
+uiPadding.PaddingRight = UDim.new(0, 4)
+uiPadding.Parent = scrollFrame
+
+----------------------------------------------------
+-- 6. TẠO NÚT "Full"
+----------------------------------------------------
+local fullBtn = Instance.new("TextButton")
+fullBtn.Name = "FullButton"
+fullBtn.Size = UDim2.new(0.98, 0, 0, 45)
+fullBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+fullBtn.Text = "Full"
+fullBtn.TextColor3 = Color3.fromRGB(0, 0, 139)
+fullBtn.Font = Enum.Font.GothamBold
+fullBtn.TextScaled = true
+fullBtn.Parent = scrollFrame
+
+local btnPadding1 = Instance.new("UIPadding")
+btnPadding1.PaddingTop = UDim.new(0, 8)
+btnPadding1.PaddingBottom = UDim.new(0, 8)
+btnPadding1.PaddingLeft = UDim.new(0, 10)
+btnPadding1.PaddingRight = UDim.new(0, 10)
+btnPadding1.Parent = fullBtn
+
+local btnStroke1 = Instance.new("UIStroke")
+btnStroke1.Thickness = 1
+btnStroke1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+local darkBlue = Color3.fromRGB(0, 35, 100)
+local lightBlue = Color3.fromRGB(0, 150, 255)
+btnStroke1.Color = darkBlue
+btnStroke1.Parent = fullBtn
+
+local tweenInfoBtn1 = TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+local btnColorTween1 = TweenService:Create(btnStroke1, tweenInfoBtn1, {Color = lightBlue})
+btnColorTween1:Play()
+
+local btnCorner1 = Instance.new("UICorner")
+btnCorner1.CornerRadius = UDim.new(0, 8)
+btnCorner1.Parent = fullBtn
+
+fullBtn.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/-Real-tbb-menu-script/b3f6f13574166bfb7e11e8b73bdbcba4f09eb8d7/Realorfake"))()
+    screenGui:Destroy()
+end)
+
+----------------------------------------------------
+-- 7. TẠO NÚT "Unlock Stage"
+----------------------------------------------------
+local unlockBtn = Instance.new("TextButton")
+unlockBtn.Name = "UnlockStageButton"
+unlockBtn.Size = UDim2.new(0.98, 0, 0, 45)
+unlockBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+unlockBtn.Text = "Unlock Stage"
+unlockBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+unlockBtn.Font = Enum.Font.GothamBold
+unlockBtn.TextScaled = true
+unlockBtn.Parent = scrollFrame
+
+local btnPadding2 = Instance.new("UIPadding")
+btnPadding2.PaddingTop = UDim.new(0, 8)
+btnPadding2.PaddingBottom = UDim.new(0, 8)
+btnPadding2.PaddingLeft = UDim.new(0, 10)
+btnPadding2.PaddingRight = UDim.new(0, 10)
+btnPadding2.Parent = unlockBtn
+
+local btnStroke2 = Instance.new("UIStroke")
+btnStroke2.Thickness = 1
+btnStroke2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+local pureWhite = Color3.fromRGB(255, 255, 255)
+local pureBlack = Color3.fromRGB(0, 0, 0)
+btnStroke2.Color = pureWhite
+btnStroke2.Parent = unlockBtn
+
+local tweenInfoBtn2 = TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+local btnColorTween2 = TweenService:Create(btnStroke2, tweenInfoBtn2, {Color = pureBlack})
+btnColorTween2:Play()
+
+local btnCorner2 = Instance.new("UICorner")
+btnCorner2.CornerRadius = UDim.new(0, 8)
+btnCorner2.Parent = unlockBtn
+
+unlockBtn.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/Unlocknug/refs/heads/main/unlocfstage.txt"))()
+    screenGui:Destroy()
+end)
+
+----------------------------------------------------
+-- 8. TẠO NÚT "Anti Bullet" (MỚI - TƯƠNG TỰ NÚT FULL)
+----------------------------------------------------
+local antiBulletBtn = Instance.new("TextButton")
+antiBulletBtn.Name = "AntiBulletButton"
+antiBulletBtn.Size = UDim2.new(0.98, 0, 0, 45)
+antiBulletBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Nền đen
+antiBulletBtn.Text = "Anti Bullet"
+antiBulletBtn.TextColor3 = Color3.fromRGB(0, 0, 139) -- Chữ xanh đậm
+antiBulletBtn.Font = Enum.Font.GothamBold
+antiBulletBtn.TextScaled = true
+antiBulletBtn.Parent = scrollFrame
+
+local btnPadding3 = Instance.new("UIPadding")
+btnPadding3.PaddingTop = UDim.new(0, 8)
+btnPadding3.PaddingBottom = UDim.new(0, 8)
+btnPadding3.PaddingLeft = UDim.new(0, 10)
+btnPadding3.PaddingRight = UDim.new(0, 10)
+btnPadding3.Parent = antiBulletBtn
+
+-- Viền xanh nước biển mỏng & Đổi màu liên tục giống nút Full
+local btnStroke3 = Instance.new("UIStroke")
+btnStroke3.Thickness = 1
+btnStroke3.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+btnStroke3.Color = darkBlue
+btnStroke3.Parent = antiBulletBtn
+
+local tweenInfoBtn3 = TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+local btnColorTween3 = TweenService:Create(btnStroke3, tweenInfoBtn3, {Color = lightBlue})
+btnColorTween3:Play()
+
+local btnCorner3 = Instance.new("UICorner")
+btnCorner3.CornerRadius = UDim.new(0, 8)
+btnCorner3.Parent = antiBulletBtn
+
+-- Sự kiện nhấn nút Anti Bullet
+antiBulletBtn.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/Anti-n/refs/heads/main/anti%20%C4%91%E1%BA%A1n%20%2B%20m%C3%A3%20ho%C3%A1%20%2B%20anti%20taikhoan.txt"))()
+    screenGui:Destroy()
+end)
