@@ -1,4 +1,4 @@
--- Delta Roblox Script - Hamster Menu (Sửa triệt để lỗi viền vuông của Menu & Nút)
+-- Delta Roblox Script - Hamster Menu (Đã thêm logic kiểm tra server cho nút tbb wow)
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
@@ -13,15 +13,15 @@ screenGui.DisplayOrder = 999999
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = PlayerGui
 
--- 2. TẠO FRAME VIỀN MENU (Đóng vai trò làm viền màu cam nhấp nháy)
+-- 2. TẠO FRAME VIỀN MENU
 local menuBorder = Instance.new("Frame")
 menuBorder.Name = "MenuBorder"
 menuBorder.Size = UDim2.new(0.4, 0, 0.5, 0)
 menuBorder.Position = UDim2.new(0.3, 0, 0.25, 0)
-menuBorder.BackgroundColor3 = Color3.fromRGB(180, 60, 0) -- Màu cam đậm ban đầu
+menuBorder.BackgroundColor3 = Color3.fromRGB(180, 60, 0)
 menuBorder.BorderSizePixel = 0
 menuBorder.Active = true
-menuBorder.Draggable = true -- Cho phép kéo thả từ khung viền này
+menuBorder.Draggable = true
 menuBorder.Parent = screenGui
 
 local uiSizeConstraint = Instance.new("UISizeConstraint")
@@ -29,33 +29,31 @@ uiSizeConstraint.MinSize = Vector2.new(300, 220)
 uiSizeConstraint.MaxSize = Vector2.new(500, 380)
 uiSizeConstraint.Parent = menuBorder
 
--- Bo góc cho khung viền ngoài của Menu
 local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(0, 12)
 borderCorner.Parent = menuBorder
 
--- 3. TẠO FRAME NỀN MENU CHÍNH (Nằm thụt vào trong 1px để lộ viền cam)
+-- 3. TẠO FRAME NỀN MENU CHÍNH
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(1, -2, 1, -2) -- Nhỏ hơn viền ngoài 1px mỗi bên (tổng cộng 2px)
-mainFrame.Position = UDim2.new(0, 1, 0, 1) -- Căn lề thụt vào đúng 1px
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- Nền đen của menu
+mainFrame.Size = UDim2.new(1, -2, 1, -2)
+mainFrame.Position = UDim2.new(0, 1, 0, 1)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = menuBorder
 
--- Bo góc cho Frame nền trong (Nhỏ hơn 1 chút để khít hoàn hảo)
 local mainCorner = Instance.new("UICorner")
 mainCorner.CornerRadius = UDim.new(0, 11)
 mainCorner.Parent = mainFrame
 
--- Tween đổi màu liên tục từ cam đậm sang cam nhạt cho viền Menu chính
+-- Tween đổi màu viền cam
 local darkOrange = Color3.fromRGB(180, 60, 0)
 local lightOrange = Color3.fromRGB(255, 165, 0)
 local tweenInfoMenu = TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 local menuColorTween = TweenService:Create(menuBorder, tweenInfoMenu, {BackgroundColor3 = lightOrange})
 menuColorTween:Play()
 
--- 4. Tiêu đề "Hamster"
+-- Tiêu đề "Hamster"
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
 titleLabel.Size = UDim2.new(1, 0, 0.15, 0)
@@ -66,7 +64,7 @@ titleLabel.Font = Enum.Font.GothamBold
 titleLabel.TextScaled = true
 titleLabel.Parent = mainFrame
 
--- Line phân cách bên trong
+-- Line phân cách
 local line = Instance.new("Frame")
 line.Size = UDim2.new(0.9, 0, 0, 1)
 line.Position = UDim2.new(0.05, 0, 0.15, 0)
@@ -74,7 +72,7 @@ line.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 line.BorderSizePixel = 0
 line.Parent = mainFrame
 
--- 5. Khung cuộn nội dung (ScrollingFrame)
+-- 4. Khung cuộn nội dung (ScrollingFrame)
 local scrollFrame = Instance.new("ScrollingFrame")
 scrollFrame.Name = "ContentScroll"
 scrollFrame.Position = UDim2.new(0.05, 0, 0.18, 0)
@@ -100,9 +98,8 @@ uiPadding.PaddingRight = UDim.new(0, 6)
 uiPadding.Parent = scrollFrame
 
 
--- HÀM TẠO NÚT SIÊU CHUẨN (KHÔNG BỊ LỖI VIỀN VUÔNG)
-local function createPerfectButton(name, text, textColor, borderStartColor, borderEndColor, onClickFunction)
-    -- Frame ngoài: Đóng vai trò là "Viền màu" có bo góc tròn trịa
+-- HÀM TẠO NÚT TỔNG QUÁT
+local function createPerfectButton(name, text, textColor, borderStartColor, borderEndColor, onClickCallback)
     local borderFrame = Instance.new("Frame")
     borderFrame.Name = name.."_Border"
     borderFrame.Size = UDim2.new(0.98, 0, 0, 45)
@@ -114,81 +111,108 @@ local function createPerfectButton(name, text, textColor, borderStartColor, bord
     buttonCorner.CornerRadius = UDim.new(0, 8)
     buttonCorner.Parent = borderFrame
 
-    -- Frame trong: Đóng vai trò làm "Nền Đen", nhỏ hơn frame ngoài 1px mỗi bên để lộ phần viền màu ra
     local innerFrame = Instance.new("Frame")
     innerFrame.Name = "Inner"
     innerFrame.Size = UDim2.new(1, -2, 1, -2)
     innerFrame.Position = UDim2.new(0, 1, 0, 1)
-    innerFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Nền đen chuẩn
+    innerFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     innerFrame.BorderSizePixel = 0
     innerFrame.Parent = borderFrame
 
     local innerCorner = Instance.new("UICorner")
-    innerCorner.CornerRadius = UDim.new(0, 7) -- Bo góc nhỏ hơn 1 chút để khít
+    innerCorner.CornerRadius = UDim.new(0, 7)
     innerCorner.Parent = innerFrame
 
-    -- Nút bấm chính nằm đè lên hoàn toàn
     local actualButton = Instance.new("TextButton")
     actualButton.Name = "Button"
     actualButton.Size = UDim2.new(1, 0, 1, 0)
-    actualButton.BackgroundTransparency = 1 -- Trong suốt hoàn toàn để lộ thiết kế bên dưới
+    actualButton.BackgroundTransparency = 1
     actualButton.Text = text
     actualButton.TextColor3 = textColor
     actualButton.Font = Enum.Font.GothamBold
     actualButton.TextSize = 16
     actualButton.Parent = innerFrame
 
-    -- Hiệu ứng chuyển màu viền liên tục (Thay đổi màu của borderFrame)
+    -- Hiệu ứng đổi màu viền nút
     local tweenInfo = TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
     local colorTween = TweenService:Create(borderFrame, tweenInfo, {BackgroundColor3 = borderEndColor})
     colorTween:Play()
 
-    -- Kết nối sự kiện click
-    actualButton.MouseButton1Click:Connect(onClickFunction)
+    -- Sự kiện click
+    actualButton.MouseButton1Click:Connect(function()
+        -- 1. Xóa Menu ngay lập tức
+        screenGui:Destroy()
+        
+        -- 2. Chạy hàm callback thực thi script tương ứng
+        task.spawn(onClickCallback)
+    end)
 end
 
 
 ----------------------------------------------------
--- 6. Tạo nút "Full"
+-- 5. Tạo các nút chức năng
 ----------------------------------------------------
 createPerfectButton(
     "Full", 
     "Full", 
-    Color3.fromRGB(0, 0, 139), -- Chữ xanh đậm
-    Color3.fromRGB(0, 35, 100), -- Viền xanh siêu đậm
-    Color3.fromRGB(0, 150, 255), -- Viền xanh nhạt
+    Color3.fromRGB(0, 0, 139), 
+    Color3.fromRGB(0, 35, 100), 
+    Color3.fromRGB(0, 150, 255), 
     function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/-Real-tbb-menu-script/b3f6f13574166bfb7e11e8b73bdbcba4f09eb8d7/Realorfake"))()
-        screenGui:Destroy()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/-Real-tbb-menu-script/b3f6f13574166bfb7e11e8b73bdbcba4f09eb8d7/Realorfake"))()
+        end)
     end
 )
 
-----------------------------------------------------
--- 7. Tạo nút "Unlock Stage"
-----------------------------------------------------
 createPerfectButton(
     "UnlockStage", 
     "Unlock Stage", 
-    Color3.fromRGB(255, 255, 255), -- Chữ trắng
-    Color3.fromRGB(255, 255, 255), -- Viền trắng
-    Color3.fromRGB(0, 0, 0), -- Viền đen
+    Color3.fromRGB(255, 255, 255), 
+    Color3.fromRGB(255, 255, 255), 
+    Color3.fromRGB(0, 0, 0), 
     function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/Unlocknug/refs/heads/main/unlocfstage.txt"))()
-        screenGui:Destroy()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/Unlocknug/refs/heads/main/unlocfstage.txt"))()
+        end)
     end
 )
 
-----------------------------------------------------
--- 8. Tạo nút "Anti Bullet"
-----------------------------------------------------
 createPerfectButton(
     "AntiBullet", 
     "Anti Bullet", 
-    Color3.fromRGB(0, 0, 139), -- Chữ xanh đậm
-    Color3.fromRGB(0, 35, 100), -- Viền xanh siêu đậm
-    Color3.fromRGB(0, 150, 255), -- Viền xanh nhạt
+    Color3.fromRGB(0, 0, 139), 
+    Color3.fromRGB(0, 35, 100), 
+    Color3.fromRGB(0, 150, 255), 
     function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/Anti-n/refs/heads/main/anti%20%C4%91%E1%BA%A1n%20%2B%20m%C3%A3%20ho%C3%A1%20%2B%20anti%20taikhoan.txt"))()
-        screenGui:Destroy()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/Anti-n/refs/heads/main/anti%20%C4%91%E1%BA%A1n%20%2B%20m%C3%A3%20ho%C3%A1%20%2B%20anti%20taikhoan.txt"))()
+        end)
+    end
+)
+
+-- Nút "tbb wow" tích hợp vòng lặp kiểm tra số lượng người chơi
+createPerfectButton(
+    "TbbWow", 
+    "tbb wow", 
+    Color3.fromRGB(255, 255, 255), 
+    Color3.fromRGB(180, 60, 0), 
+    Color3.fromRGB(255, 165, 0), 
+    function()
+        -- Vòng lặp quét số lượng người chơi liên tục mỗi 2 giây (Chạy ngầm)
+        task.spawn(function()
+            while true do
+                if #Players:GetPlayers() > 1 then
+                    LocalPlayer:Kick("SON Only usable when there is only one person on the server")
+                    break
+                end
+                task.wait(2)
+            end
+        end)
+
+        -- Thực thi script chính
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/emembe7-sketch/Tbb_wow/refs/heads/main/tbbwowrealold.txt"))()
+        end)
     end
 )
