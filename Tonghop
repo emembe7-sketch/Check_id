@@ -202,7 +202,7 @@ createPerfectButton(
         -- Vòng lặp quét số lượng người chơi liên tục mỗi 2 giây (Chạy ngầm)
         task.spawn(function()
             while true do
-                if #Players:GetPlayers() > 6 then
+                if #Players:GetPlayers() > 1 then
                     LocalPlayer:Kick("SON Only usable when there is only one person on the server")
                     break
                 end
@@ -212,7 +212,7 @@ createPerfectButton(
 
         -- Thực thi script chính
         pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/emembe7-sketch/Tbb_wow/refs/heads/main/tbbwowrealold.txt"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/sangggggg991120-code/script-battle-brick-/refs/heads/main/Tbbwowfor_nember"))()
         end)
     end
 )
